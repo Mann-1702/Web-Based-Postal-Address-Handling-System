@@ -1,0 +1,36 @@
+server:
+  port: 9091
+
+logging:
+  level:
+    org.hibernate.SQL: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
+
+
+spring:
+  application:
+    name: address-manager
+  datasource:
+    url: jdbc:mysql://localhost:3306/addressdb?createDatabaseIfNotExist=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+
+  prometheus:
+    metrics:
+      export:
+        enabled: tru
+  metrics:
+    binders:
+      system:
+        enabled: false
