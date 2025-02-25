@@ -5,6 +5,9 @@ import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
 import org.springframework.stereotype.Component;
 
+/**
+ * This Class used to collect  Java instrumentation and metric
+ */
 @Component
 public class CustomMetrics {
     private final LongCounter addressCounter;

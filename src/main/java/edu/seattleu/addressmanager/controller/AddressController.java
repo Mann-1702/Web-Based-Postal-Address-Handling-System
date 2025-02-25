@@ -47,6 +47,9 @@ public class AddressController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     *  Search addresses by partial street
+     */
     @Operation(summary = "Search addresses by partial street")
     @GetMapping("/search")
     public  ResponseEntity<List<Address>>  searchByStreet(@RequestBody SearchRequest request) {
