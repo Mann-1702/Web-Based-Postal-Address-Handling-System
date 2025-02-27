@@ -26,12 +26,6 @@ public class LocationController {
         return locationService.findAllCountries();
     }
 
-    @Operation(summary = "Create or update country")
-    @PostMapping("/countries")
-    public Country createCountry(@RequestBody Country c) {
-        return locationService.saveCountry(c);
-    }
-
     // --- States ---
     @Operation(summary = "Get all states")
     @GetMapping("/states")
@@ -45,11 +39,6 @@ public class LocationController {
         return locationService.findStatesByCountry(countryId);
     }
 
-    @Operation(summary = "Create or update state")
-    @PostMapping("/states")
-    public StateProvince createState(@RequestBody StateProvince s) {
-        return locationService.saveState(s);
-    }
 
     // --- Cities ---
     @Operation(summary = "Get all cities")
@@ -64,9 +53,5 @@ public class LocationController {
         return locationService.findCitiesByState(stateId);
     }
 
-    @Operation(summary = "Create or update city")
-    @PostMapping("/cities")
-    public City createCity(@RequestBody City city) {
-        return locationService.saveCity(city);
-    }
+
 }

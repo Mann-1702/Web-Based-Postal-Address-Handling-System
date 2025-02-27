@@ -3,6 +3,8 @@ package edu.seattleu.addressmanager.service;
 import edu.seattleu.addressmanager.metrics.CustomMetrics;
 import edu.seattleu.addressmanager.model.Address;
 import edu.seattleu.addressmanager.repository.AddressRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,11 +47,20 @@ public class AddressService {
         addressRepo.deleteById(id);
     }
 
-    public List<Address> searchByStreet(String street) {
+    public Page<Address> searchByStreet(String street, Pageable pageable) {
         log.info("Searching addresses by partial street: {}", street);
         customMetrics.incrementAddressOps();
-        return addressRepo.findByStreetContainingIgnoreCase(street);
+        return addressRepo.findByStreetContainingIgnoreCase(street,pageable);
     }
+
+    public Page<Address> search(String address01, String address02 , String postalCode ,
+                                Long cityId , Long stateId , Long countryId , Pageable pageable) {
+        log.info("Searching addresses by partial street address01: {},address02: {},postalCode: {} , cityId: {}," +
+                        "stateId: {},countryId:{}", address01, address02,postalCode,cityId,stateId,countryId);
+        customMetrics.incrementAddressOps();
+        return addressRepo.searchAddresses(address01,address02,postalCode,cityId,stateId,countryId,pageable);
+    }
+
 
     public List<Address> findByCity(Long cityId) {
         log.info("Fetching addresses in city ID = {}", cityId);

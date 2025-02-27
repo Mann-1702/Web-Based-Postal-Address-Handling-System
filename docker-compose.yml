@@ -29,7 +29,7 @@ services:
 
   address-manager:
     build:
-      context: ../AddressManager
+      context: ../Web-Based-Postal-Address-Handling-System
       dockerfile: Dockerfile
     container_name: address-manager
     platform: linux/amd64
