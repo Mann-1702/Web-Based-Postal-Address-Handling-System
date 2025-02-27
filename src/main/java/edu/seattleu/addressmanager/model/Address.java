@@ -18,9 +18,15 @@ public class Address {
     @JsonProperty("id")
     private Long id;
 
-    @Schema(description = "Street address", example = "123 Main St")
-    @JsonProperty("street")
-    private String street;
+    @Schema(description = "Address01", example = "123 Main St")
+    @JsonProperty("address01")
+    private String address01;
+
+
+
+    @Schema(description = "Address02", example = "123 Main St")
+    @JsonProperty("address02")
+    private String address02;
 
     @Schema(description = "Postal code of the address", example = "98101")
     @JsonProperty("postalCode")
@@ -69,8 +75,9 @@ public class Address {
         // Default no-args constructor
     }
 
-    public Address(String street, String postalCode, City city) {
-        this.street = street;
+    public Address(String address01, String address02,String postalCode, City city) {
+        this.address01 = address01;
+        this.address02 = address02;
         this.postalCode = postalCode;
         this.city = city;
     }
@@ -83,12 +90,12 @@ public class Address {
         this.id = id;
     }
 
-    public String getStreet() {
-        return street;
+    public String getAddress01() {
+        return address01;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setAddress01(String street) {
+        this.address01 = street;
     }
 
     public String getPostalCode() {
@@ -107,5 +114,12 @@ public class Address {
         this.city = city;
     }
 
+    public String getAddress02() {
+        return address02;
+    }
+
+    public void setAddress02(String address02) {
+        this.address02 = address02;
+    }
 
 }

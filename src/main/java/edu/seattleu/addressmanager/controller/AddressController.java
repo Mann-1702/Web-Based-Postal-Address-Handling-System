@@ -53,7 +53,7 @@ public class AddressController {
     @Operation(summary = "Search addresses by partial street")
     @GetMapping("/search")
     public  ResponseEntity<List<Address>>  searchByStreet(@RequestBody SearchRequest request) {
-        List<Address> addresses = addressService.searchByStreet(request.getStreet());
+        List<Address> addresses = addressService.searchByStreet(request.getAddress01());
 
         if (addresses.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 when no results
