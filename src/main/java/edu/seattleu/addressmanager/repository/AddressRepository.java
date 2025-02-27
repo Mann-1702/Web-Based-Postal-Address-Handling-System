@@ -19,6 +19,6 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "JOIN FETCH a.city c " +
             "JOIN FETCH c.state s " +
             "JOIN FETCH s.country co " +
-            "WHERE LOWER(a.street) LIKE LOWER(CONCAT('%', :street, '%'))")
+            "WHERE LOWER(a.address01) LIKE LOWER(CONCAT('%', :street, '%'))")
     List<Address> findByStreetContainingIgnoreCase(@Param("street") String street);
 }

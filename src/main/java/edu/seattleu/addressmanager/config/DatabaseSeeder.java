@@ -83,6 +83,7 @@ public class DatabaseSeeder {
                         for (int a = 0; a < addressesPerCity; a++) {
                             Address address = new Address(
                                     faker.address().streetAddress(),
+                                    faker.address().secondaryAddress(),
                                     faker.address().zipCode(),
                                     city
                             );
