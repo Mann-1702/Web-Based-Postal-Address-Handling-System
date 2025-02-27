@@ -51,6 +51,17 @@ public class AddressService {
         return addressRepo.findByStreetContainingIgnoreCase(street);
     }
 
+    public List<Address> search(String address01,String address02 ,String postalCode ,
+                                Long cityId , Long stateId ,Long countryId ) {
+        log.info("Searching addresses by partial street address01: {},address02: {},postalCode: {} , cityId: {}," +
+                        "stateId: {},countryId:{}",
+                address01,
+                address02,postalCode,cityId,stateId,countryId);
+        customMetrics.incrementAddressOps();
+        return addressRepo.searchAddresses(address01,address02,postalCode,cityId,stateId,countryId);
+    }
+
+
     public List<Address> findByCity(Long cityId) {
         log.info("Fetching addresses in city ID = {}", cityId);
         customMetrics.incrementAddressOps();

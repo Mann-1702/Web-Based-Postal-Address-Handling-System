@@ -1,6 +1,7 @@
 package edu.seattleu.addressmanager.controller;
 
 
+import edu.seattleu.addressmanager.exceptions.ResourceNotFoundException;
 import edu.seattleu.addressmanager.model.Address;
 import edu.seattleu.addressmanager.model.SearchRequest;
 import edu.seattleu.addressmanager.service.AddressService;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,9 +52,9 @@ public class AddressController {
     /**
      *  Search addresses by partial street
      */
-    @Operation(summary = "Search addresses by partial street")
-    @GetMapping("/search")
-    public  ResponseEntity<List<Address>>  searchByStreet(@RequestBody SearchRequest request) {
+    @Operation(summary = "Search addresses by partial address01")
+    @GetMapping("/searchByAddress01")
+    public  ResponseEntity<List<Address>>  searchByStreet(@Valid @RequestBody SearchRequest request) {
         List<Address> addresses = addressService.searchByStreet(request.getAddress01());
 
         if (addresses.isEmpty()) {
@@ -61,6 +63,26 @@ public class AddressController {
 
         return ResponseEntity.ok(addresses);
     }
+
+    @Operation(summary = "Search addresses by any")
+    @GetMapping("/search")
+    public  ResponseEntity<List<Address>>  search(@Valid @RequestBody SearchRequest request) {
+
+
+        List<Address> addresses = addressService.search(request.getAddress01(),
+                request.getAddress02(),
+                request.getPostalCode(),
+                request.getCityId(),
+                request.getStateId(),
+                request.getCountryId());
+
+        if (addresses.isEmpty()) {
+            // Instead of returning 404 directly:
+            throw new ResourceNotFoundException("No addresses found for the provided address01.");
+        }
+        return ResponseEntity.ok(addresses);
+    }
+
 
     @Operation(summary = "Get addresses by city ID")
     @GetMapping("/city/{cityId}")
@@ -75,27 +97,6 @@ public class AddressController {
     }
 
 
-    /*
- @Operation(summary = "Create or update address")
- @PostMapping
- @ApiResponses(value = {
-         @ApiResponse(responseCode = "201", description = "Address created successfully"),
-         @ApiResponse(responseCode = "400", description = "Invalid input data")
- })
- public Address createOrUpdate(@RequestBody Address address) {
-     return addressService.save(address);
- }
-
-
- @Operation(summary = "Delete address")
- @DeleteMapping("/{id}")
- public ResponseEntity<Void> delete(@PathVariable Long id) {
-     addressService.delete(id);
-     return ResponseEntity.noContent().build();
- }
-
-
-  */
 
 
 }
