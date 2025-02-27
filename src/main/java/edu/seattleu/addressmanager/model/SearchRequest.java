@@ -1,6 +1,7 @@
 package edu.seattleu.addressmanager.model;
 
 
+import edu.seattleu.addressmanager.validators.AtLeastOneField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -11,9 +12,10 @@ import lombok.Setter;
 @Setter
 @Getter
 @Schema(name = "SearchRequest", description = "Represents address Search request")
+@AtLeastOneField  // This with execute my custom validator
 public class SearchRequest {
 
-    @NotNull
+    //@NotNull(message = "address01 cannot  be null or exceed 255 characters")
     @Size(max = 255, message = "address01 cannot exceed 255 characters")
     @Schema(description = "partial address Request by address01", example = "123 Main St")
     private String address01;

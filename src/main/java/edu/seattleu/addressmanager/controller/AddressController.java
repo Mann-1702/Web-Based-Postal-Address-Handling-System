@@ -78,7 +78,7 @@ public class AddressController {
 
         if (addresses.isEmpty()) {
             // Instead of returning 404 directly:
-            throw new ResourceNotFoundException("No addresses found for the provided address01.");
+            throw new ResourceNotFoundException("No addresses found for your search criteria.");
         }
         return ResponseEntity.ok(addresses);
     }

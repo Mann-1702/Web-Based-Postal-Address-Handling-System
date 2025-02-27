@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         // 400 Bad Request
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage()
+                 ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -52,8 +52,8 @@ public class GlobalExceptionHandler {
         // 500 Internal Server Error
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                ex.getMessage()    // or "An unexpected error occurred"
-        );
+                ex.getMessage()
+        );   // or "An unexpected error occurred"
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
