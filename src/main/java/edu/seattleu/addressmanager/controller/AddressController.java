@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,8 +56,8 @@ public class AddressController {
      */
     @Operation(summary = "Search addresses by partial address01")
     @GetMapping("/searchByAddress01")
-    public  ResponseEntity<List<Address>>  searchByStreet(@Valid @RequestBody SearchRequest request) {
-        List<Address> addresses = addressService.searchByStreet(request.getAddress01());
+    public  ResponseEntity<Page<Address>>  searchByStreet(@Valid @RequestBody SearchRequest request, Pageable pageable) {
+        Page<Address> addresses = addressService.searchByStreet(request.getAddress01(), pageable);
 
         if (addresses.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 when no results
@@ -64,17 +66,18 @@ public class AddressController {
         return ResponseEntity.ok(addresses);
     }
 
-    @Operation(summary = "Search addresses by any")
+    @Operation(summary = "Search addresses by any combination , you must at least give one value")
     @GetMapping("/search")
-    public  ResponseEntity<List<Address>>  search(@Valid @RequestBody SearchRequest request) {
+    public  ResponseEntity<Page<Address>>  search(@Valid @RequestBody SearchRequest request, Pageable pageable) {
 
 
-        List<Address> addresses = addressService.search(request.getAddress01(),
+        Page<Address> addresses = addressService.search(request.getAddress01(),
                 request.getAddress02(),
                 request.getPostalCode(),
                 request.getCityId(),
                 request.getStateId(),
-                request.getCountryId());
+                request.getCountryId(),
+                pageable);
 
         if (addresses.isEmpty()) {
             // Instead of returning 404 directly:
