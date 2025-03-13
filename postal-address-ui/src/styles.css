@@ -41,3 +41,40 @@ body {
     background-color: #0056b3;
   }
   
+
+  /* Custom styles for HomePage */
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .form-check-input {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .form-check-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .form-check {
+    margin-bottom: 1rem;
+  }
+  
+  .container {
+    background-color: #f8f9fa;
+  }
+  
+  .card p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
