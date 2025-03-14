@@ -17,6 +17,9 @@ const GuidedSearch = () => {
   const [loadingStates, setLoadingStates] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAddresses, setLoadingAddresses] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0); // Track total pages
 
   // Fetch countries
   useEffect(() => {
@@ -126,16 +129,48 @@ const GuidedSearch = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Prepare the data for submission (could be a POST request)
-    const addressData = {
+  const handleNextPage = () => {
+  setCurrentPage((prevPage) => prevPage + 1);
+  handleSubmit(currentPage + 1); // Fetch next page data
+    };
+
+  const handlePrevPage = () => {
+  setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  handleSubmit(currentPage - 1); // Fetch previous page data
+    };
+
+  // Handle submit
+  const handleSubmit = async (page) => {
+    const searchParams = {
       address01,
       cityId,
       stateId,
       countryId,
     };
-    console.log('Submitting address:', addressData);
-    // You can send this addressData to your backend API
+
+    const paginationParams = {
+      page: page,
+      size: pageSize,
+  };
+
+    const hasValue = Object.values(searchParams).some((val) => val);
+    if (!hasValue) {
+      alert("Please enter at least one search criteria.");
+      return;
+    }
+
+    try {
+        const response = await axios.post("http://localhost:9091/api/v1/addresses/search", {
+          ...searchParams,
+          ...paginationParams,
+    });
+
+    setAddresses(response.data.content); // Assuming "content" contains the paginated results
+    setTotalPages(response.data.totalPages); // Set total pages
+
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+  }
   };
 
   return (
@@ -204,7 +239,21 @@ const GuidedSearch = () => {
 
 
         {/* Submit Button */}
-        <button className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+        <button className="btn btn-primary" onClick={() => handleSubmit(currentPage)}>Submit</button>
+
+        {/* Display search results */}
+        <div>
+          {/* Display results */}
+          <ul>
+            {addresses.map((address) => (
+              <li key={address.id}>{address.address01}</li>
+            ))}
+          </ul>
+
+          {/* Pagination controls */}
+          <button onClick={handlePrevPage} disabled={currentPage === 0}>Previous</button>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>Next</button>
+        </div>
       </div>
     </div>
   );
