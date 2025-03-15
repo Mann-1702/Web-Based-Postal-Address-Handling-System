@@ -20,6 +20,7 @@ const GuidedSearch = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0); // Track total pages
+  const [showTable, setShowTable] = useState(false); // State to control table visibility
 
   // Fetch countries
   useEffect(() => {
@@ -130,17 +131,53 @@ const GuidedSearch = () => {
   };
 
   const handleNextPage = () => {
-  setCurrentPage((prevPage) => prevPage + 1);
-  handleSubmit(currentPage + 1); // Fetch next page data
-    };
+    if (currentPage < totalPages - 1) {
+      fetchPage(currentPage + 1);
+    }
+  };
 
   const handlePrevPage = () => {
-  setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-  handleSubmit(currentPage - 1); // Fetch previous page data
-    };
+    if (currentPage > 0) {
+      fetchPage(currentPage - 1);
+    }
+  };
 
   // Handle submit
-  const handleSubmit = async (page) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const searchParams = {
+      address01,
+      cityId,
+      stateId,
+      countryId,
+    };
+
+    const paginationParams = {
+      page: currentPage,
+      size: pageSize,
+    };
+
+    const hasValue = Object.values(searchParams).some((val) => val);
+    if (!hasValue) {
+      alert("Please enter at least one search criteria.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:9091/api/v1/addresses/search?page=${currentPage}`, {
+        ...searchParams,
+        ...paginationParams,
+      });
+
+      setAddresses(response.data.content); // Assuming "content" contains the paginated results
+      setTotalPages(response.data.totalPages); // Set total pages
+      setShowTable(true); // Show the table after successful validation
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+
+  const fetchPage = async (page) => {
     const searchParams = {
       address01,
       cityId,
@@ -151,26 +188,19 @@ const GuidedSearch = () => {
     const paginationParams = {
       page: page,
       size: pageSize,
-  };
-
-    const hasValue = Object.values(searchParams).some((val) => val);
-    if (!hasValue) {
-      alert("Please enter at least one search criteria.");
-      return;
-    }
+    };
 
     try {
-        const response = await axios.post("http://localhost:9091/api/v1/addresses/search", {
-          ...searchParams,
-          ...paginationParams,
-    });
-
-    setAddresses(response.data.content); // Assuming "content" contains the paginated results
-    setTotalPages(response.data.totalPages); // Set total pages
-
-  } catch (error) {
-    console.error("Error fetching search results:", error);
-  }
+      const response = await axios.post(`http://localhost:9091/api/v1/addresses/search?page=${page}`, {
+        ...searchParams,
+        ...paginationParams,
+      });
+      setAddresses(response.data.content);
+      setCurrentPage(response.data.pageable.pageNumber);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching page:', error);
+    }
   };
 
   return (
@@ -237,23 +267,50 @@ const GuidedSearch = () => {
           </div>
         )}
 
-
         {/* Submit Button */}
-        <button className="btn btn-primary" onClick={() => handleSubmit(currentPage)}>Submit</button>
+        <button className="btn btn-primary" onClick={handleSubmit}>Validate</button>
 
         {/* Display search results */}
-        <div>
-          {/* Display results */}
-          <ul>
-            {addresses.map((address) => (
-              <li key={address.id}>{address.address01}</li>
-            ))}
-          </ul>
-
-          {/* Pagination controls */}
-          <button onClick={handlePrevPage} disabled={currentPage === 0}>Previous</button>
-          <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>Next</button>
-        </div>
+        {showTable && (
+          <div>
+            <h2>Addresses</h2>
+            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>Address Line 1</th>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>Address Line 2</th>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>Postal Code</th>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>City</th>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>State</th>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>Country</th>
+                </tr>
+              </thead>
+              <tbody>
+                {addresses.map((addr) => (
+                  <tr key={addr.id}>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.address01}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.address02}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.postalCode}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.cityName}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.stateName}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }}>{addr.CounrtyName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ marginTop: '10px' }}>
+              <button onClick={handlePrevPage} disabled={currentPage === 0}>
+                Previous
+              </button>
+              <span style={{ margin: '0 10px' }}>
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
