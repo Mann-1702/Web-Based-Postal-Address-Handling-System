@@ -92,8 +92,6 @@ const FreeSearch = () => {
     // Construct the request body with all fields, even if they are blank
     const requestBody = {
       address01: address.address01 || '',
-      address02: address.address02 || '',
-      postalCode: address.postalCode || '',
       countryId: countryId || '',
       stateId: stateId || '',
       cityId: cityId || '',
@@ -118,7 +116,7 @@ const FreeSearch = () => {
         alert('No address found for your search');
       } else {
         console.error('Error validating address:', error);
-        alert('Error validating address');
+        alert('At least one search field must be provided');
       }
     }
   };
@@ -139,8 +137,6 @@ const FreeSearch = () => {
     try {
       const requestBody = {
         address01: address.address01 || '',
-        address02: address.address02 || '',
-        postalCode: address.postalCode || '',
         countryId: countryId || '',
         stateId: stateId || '',
         cityId: cityId || '',
@@ -171,26 +167,6 @@ const FreeSearch = () => {
               onChange={handleChange}
               className="form-control broad-input"
               placeholder="Address Line 1"
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="text"
-              name="address02"
-              value={address.address02}
-              onChange={handleChange}
-              className="form-control broad-input"
-              placeholder="Address Line 2"
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="text"
-              name="postalCode"
-              value={address.postalCode}
-              onChange={handleChange}
-              className="form-control broad-input"
-              placeholder="Postal Code"
             />
           </div>
           <div className="mb-3">
