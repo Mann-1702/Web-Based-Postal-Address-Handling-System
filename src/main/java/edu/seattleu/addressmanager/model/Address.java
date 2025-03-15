@@ -60,7 +60,7 @@ public class Address {
     }
 
     @JsonProperty("countryId")
-    public Long getCounrtyId() {
+    public Long getCountryId() {
         return city != null ? city.getCountryId() : null;
     }
 
