@@ -11,11 +11,12 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container min-vh-100 d-flex justify-content-center align-items-center bg-light py-5">
-      <div className="card p-4 shadow-sm w-100" style={{ maxWidth: '500px' }}>
-        <h1 className="text-center mb-4">Search Type Selection</h1>
+    <div className="container min-vh-50 d-flex justify-content-center align-items-center bg-light py-5">
+      <div className="card p-5 shadow-lg w-100" style={{ maxWidth: '1200px' }}>
+        <h1 className="text-center mb-4">Postal Address Handling System</h1>
+        <p className="text-center mb-4">Please select a search type to proceed:</p>
 
-        <div className="form-check">
+        <div className="form-check mb-3">
           <input
             type="radio"
             className="form-check-input"
@@ -43,8 +44,16 @@ const HomePage = () => {
           </label>
         </div>
 
-        {searchType === 'guided' && <GuidedSearch />}
-        {searchType === 'free' && <FreeSearch />}
+        {searchType === 'guided' && (
+          <div className="mt-4">
+            <GuidedSearch />
+          </div>
+        )}
+        {searchType === 'free' && (
+          <div className="mt-4">
+            <FreeSearch />
+          </div>
+        )}
       </div>
     </div>
   );
