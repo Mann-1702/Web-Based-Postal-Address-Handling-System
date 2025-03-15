@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -66,8 +68,9 @@ public class AddressController {
         return ResponseEntity.ok(addresses);
     }
 
+
     @Operation(summary = "Search addresses by any combination , you must at least give one value")
-    @GetMapping("/search")
+    @PostMapping("/search")
     public  ResponseEntity<Page<Address>>  search(@Valid @RequestBody SearchRequest request, Pageable pageable) {
 
 
@@ -85,6 +88,44 @@ public class AddressController {
         }
         return ResponseEntity.ok(addresses);
     }
+
+
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> search(
+            @RequestParam(required = false) String address01,
+            @RequestParam(required = false) String address02,
+            @RequestParam(required = false) String postalCode,
+            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Long stateId,
+            @RequestParam(required = false) Long countryId,
+            Pageable pageable) {
+
+        // Call your existing service method (addressService.search) with the extracted params
+        Page<Address> addresses = addressService.search(
+                address01,
+                address02,
+                postalCode,
+                cityId,
+                stateId,
+                countryId,
+                pageable
+        );
+
+        if (addresses.isEmpty()) {
+            throw new ResourceNotFoundException("No addresses found for your search criteria.");
+        }
+
+        // Convert Page<Address> to Map<String, Object> to match frontend expectations
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalPages", addresses.getTotalPages());
+        response.put("totalElements", addresses.getTotalElements());
+        response.put("page", pageable.getPageNumber() + 1);  // to make it 1-based
+        response.put("content", addresses.getContent());
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @Operation(summary = "Get addresses by city ID")

@@ -47,6 +47,7 @@ deploy:
 	docker-compose up --build -d
 	@echo "Deployment Complete!"
 	@echo "Application running at: http://localhost:9091/swagger-ui/index.html"
+	@echo "Prometheus UI: http://localhost:9090"
 	@echo "To manipulate data interface available at: http://localhost:8081"
 
 destroy:

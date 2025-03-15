@@ -44,3 +44,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqllocal:3306/addressdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"

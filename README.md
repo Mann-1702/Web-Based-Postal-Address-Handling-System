@@ -22,22 +22,30 @@ make --version
 
    Make your changes in the repository.
    From the project’s root folder, start the MySQL container and run the Spring Boot application:
-
+```bash
 make run
+```
+
 
 After you finish testing, stop and remove the local database container:
-
+```bash
     make down
+```
+
 
 ## 2. Deploy Multiple Containers
 
 If you need to spin up all containers (MySQL, the Dockerized API, and an admin container for MySQL):
 
-    Deploy the services:
-
-make deploy
+Deploy the services:
+```bash
+  make deploy
+```
+ 
 
 Once you’re done, clean up everything:
+```bash
+make destroy
 
-    make destroy
-
+```
+    
