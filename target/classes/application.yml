@@ -18,6 +18,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
 
 
 management:
@@ -25,12 +28,16 @@ management:
     web:
       exposure:
         include: health, info, prometheus, metrics
-
   prometheus:
     metrics:
       export:
         enabled: true
-  metrics:
-    binders:
-      system:
-        enabled: false
+
+otel:
+  trace:
+    exporter: none
+  metric:
+    exporter: prometheus
+  service:
+    name: address-manager-service
+
