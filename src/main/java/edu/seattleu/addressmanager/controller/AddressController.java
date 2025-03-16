@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/addresses")
 @Tag(name = "Addresses", description = "Manage addresses in DynamoDB")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AddressController {
     private final AddressService addressService;
 
@@ -69,25 +70,41 @@ public class AddressController {
     }
 
 
+
     @Operation(summary = "Search addresses by any combination , you must at least give one value")
     @PostMapping("/search")
     public  ResponseEntity<Page<Address>>  search(@Valid @RequestBody SearchRequest request, Pageable pageable) {
-
-
-        Page<Address> addresses = addressService.search(request.getAddress01(),
-                request.getAddress02(),
-                request.getPostalCode(),
-                request.getCityId(),
-                request.getStateId(),
-                request.getCountryId(),
-                pageable);
-
-        if (addresses.isEmpty()) {
-            // Instead of returning 404 directly:
-            throw new ResourceNotFoundException("No addresses found for your search criteria.");
-        }
-        return ResponseEntity.ok(addresses);
+    // Check if at least one search parameter is provided
+    if (isSearchParamsEmpty(request)) {
+        // Return a 400 Bad Request with an error message as a String
+        return ResponseEntity.badRequest().body("At least one search parameter is required.");
     }
+
+    // Proceed with the address search if parameters are provided
+    Page<Address> addresses = addressService.search(
+            request.getAddress01(),
+            request.getAddress02(),
+            request.getPostalCode(),
+            request.getCityId(),
+            request.getStateId(),
+            request.getCountryId(),
+            pageable);
+
+    if (addresses.isEmpty()) {
+        // Return 404 if no addresses are found with a String message
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No addresses found for your search criteria.");
+    }
+
+    // Return the addresses with a 200 OK response if search is successful
+    return ResponseEntity.ok(addresses);
+    }
+
+    private boolean isSearchParamsEmpty(SearchRequest request) {
+        return request.getAddress01() == null && request.getAddress02() == null &&
+           request.getPostalCode() == null && request.getCityId() == null &&
+           request.getStateId() == null && request.getCountryId() == null;
+        }
+
 
 
 
