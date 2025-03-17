@@ -64,7 +64,7 @@ public class Address {
         return city != null ? city.getCountryId() : null;
     }
 
-    @JsonProperty("CounrtyName")
+    @JsonProperty("CountryName")
     public String getCountryName() {
         return city != null ? city.getState().getCountry().getName(): null;
     }
