@@ -239,7 +239,7 @@ const FreeSearch = () => {
               </span>
               <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
                 Next
-              </button>
+              </button> 
             </div>
           </div> 
         )}
