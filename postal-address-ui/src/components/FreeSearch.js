@@ -241,7 +241,7 @@ const FreeSearch = () => {
                 Next
               </button>
             </div>
-          </div>
+          </div> 
         )}
       </div>
     </div>
