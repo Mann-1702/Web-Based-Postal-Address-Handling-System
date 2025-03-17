@@ -230,14 +230,14 @@ const FreeSearch = () => {
                 ))}
               </tbody>
             </table>
-            <div className="d-flex justify-content-between mt-3">
-              <button onClick={handlePreviousPage} className="btn btn-secondary" disabled={currentPage === 0}>
+            <div style={{ marginTop: '10px' }}>
+              <button onClick={handlePreviousPage} disabled={currentPage === 0}>
                 Previous
               </button>
-              <span>
+              <span style={{ margin: '0 10px' }}>
                 Page {currentPage + 1} of {totalPages}
               </span>
-              <button onClick={handleNextPage} className="btn btn-secondary" disabled={currentPage === totalPages - 1}>
+              <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
                 Next
               </button>
             </div>
