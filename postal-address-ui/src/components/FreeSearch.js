@@ -225,7 +225,7 @@ const FreeSearch = () => {
                     <td>{addr.postalCode}</td>
                     <td>{addr.cityName}</td>
                     <td>{addr.stateName}</td>
-                    <td>{addr.countryName}</td>
+                    <td>{addr.CounrtyName}</td>
                   </tr>
                 ))}
               </tbody>
